@@ -7,7 +7,7 @@ FROM ubuntu:artful-20171019
 # install SSHD
 RUN apt-get update -y && \
     apt-get install -y \
-        openssh-server=1:7.5p1-10ubuntu0.1
+        openssh-server
 RUN mkdir -p /var/run/sshd
 
 # create a test user
