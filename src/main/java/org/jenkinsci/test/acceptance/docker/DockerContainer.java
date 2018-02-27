@@ -191,6 +191,10 @@ public class DockerContainer implements Closeable {
         try {
             Docker.cmd("cp").add(cid + ":" + from).add(new File(toPath))
                     .popen().verifyOrDieWith(format("Failed to copy %s to %s", from, toPath));
+            if(sharingHostDockerService()){
+                Docker.cmd("cp").add(new File(from)).add("jenkins/ath" + ":" + from)
+                        .popen().verifyOrDieWith(format("Failed to copy %s to %s", from, toPath));
+            }
         } catch (IOException | InterruptedException e) {
             return false;
         }
