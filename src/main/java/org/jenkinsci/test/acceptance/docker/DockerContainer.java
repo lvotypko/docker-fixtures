@@ -7,6 +7,7 @@ import org.jenkinsci.utils.process.ProcessUtils;
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.URL;
 
 import static java.lang.String.*;
@@ -192,7 +193,8 @@ public class DockerContainer implements Closeable {
             Docker.cmd("cp").add(cid + ":" + from).add(new File(toPath))
                     .popen().verifyOrDieWith(format("Failed to copy %s to %s", from, toPath));
             if(sharingHostDockerService()){
-                Docker.cmd("cp").add(new File(from)).add("jenkins/ath" + ":" + from)
+                String id = InetAddress.getLocalHost().getHostName();
+                Docker.cmd("exec").add(id,"sudo", "chown", "-R", System.getProperty("user.name"), destFile.getAbsoluteFile())
                         .popen().verifyOrDieWith(format("Failed to copy %s to %s", from, toPath));
             }
         } catch (IOException | InterruptedException e) {
